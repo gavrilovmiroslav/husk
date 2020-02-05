@@ -1,0 +1,101 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Spart/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Spart.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Spart.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Spart/1.0.0": {
+      "sha512": "Bo2zq+yFRisP3U8qCMDe3Zi5wnu0XaRkr1vFQZav1PgG7bA7BDJR3s5sK/BPsPGxTuMtb6kJsPPkL5BW46aXFg==",
+      "type": "package",
+      "path": "spart/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/Spart.dll",
+        "lib/netstandard2.0/Spart.dll",
+        "spart.1.0.0.nupkg.sha512",
+        "spart.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETCoreApp,Version=v3.1": [
+      "Spart >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Miroslav\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\Miroslav\\source\\repos\\husk\\husk.csproj",
+      "projectName": "husk",
+      "projectPath": "C:\\Users\\Miroslav\\source\\repos\\husk\\husk.csproj",
+      "packagesPath": "C:\\Users\\Miroslav\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Miroslav\\source\\repos\\husk\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Miroslav\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "netcoreapp3.1"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "netcoreapp3.1": {
+        "dependencies": {
+          "Spart": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "husk/1.0.0": {
+        "dependencies": {
+          "Spart": "1.0.0"
+        },
+        "runtime": {
+          "husk.dll": {}
+        }
+      },
+      "Spart/1.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/Spart.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "husk/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Spart/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Bo2zq+yFRisP3U8qCMDe3Zi5wnu0XaRkr1vFQZav1PgG7bA7BDJR3s5sK/BPsPGxTuMtb6kJsPPkL5BW46aXFg==",
+      "path": "spart/1.0.0",
+      "hashPath": "spart.1.0.0.nupkg.sha512"
+    }
+  }
+}

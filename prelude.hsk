@@ -1,0 +1,12 @@
+﻿decltype 'void
+
+decltype 'unit
+unit : 'unit
+
+decltype 'bool
+true : 'bool
+false : 'bool
+
+and : 'bool -> 'bool -> 'bool
+>	and true true = true
+>	and _ _ = false

@@ -1,0 +1,14 @@
+C:\Users\Miroslav\source\repos\husk\bin\Debug\netcoreapp3.1\husk.exe
+C:\Users\Miroslav\source\repos\husk\obj\Debug\netcoreapp3.1\husk.csprojAssemblyReference.cache
+C:\Users\Miroslav\source\repos\husk\obj\Debug\netcoreapp3.1\husk.AssemblyInfoInputs.cache
+C:\Users\Miroslav\source\repos\husk\obj\Debug\netcoreapp3.1\husk.AssemblyInfo.cs
+C:\Users\Miroslav\source\repos\husk\bin\Debug\netcoreapp3.1\husk.deps.json
+C:\Users\Miroslav\source\repos\husk\bin\Debug\netcoreapp3.1\husk.runtimeconfig.json
+C:\Users\Miroslav\source\repos\husk\bin\Debug\netcoreapp3.1\husk.runtimeconfig.dev.json
+C:\Users\Miroslav\source\repos\husk\bin\Debug\netcoreapp3.1\husk.dll
+C:\Users\Miroslav\source\repos\husk\bin\Debug\netcoreapp3.1\husk.pdb
+C:\Users\Miroslav\source\repos\husk\bin\Debug\netcoreapp3.1\Spart.dll
+C:\Users\Miroslav\source\repos\husk\obj\Debug\netcoreapp3.1\husk.csproj.CopyComplete
+C:\Users\Miroslav\source\repos\husk\obj\Debug\netcoreapp3.1\husk.dll
+C:\Users\Miroslav\source\repos\husk\obj\Debug\netcoreapp3.1\husk.pdb
+C:\Users\Miroslav\source\repos\husk\bin\Debug\netcoreapp3.1\prelude.hsk
