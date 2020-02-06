@@ -1,12 +1,41 @@
-﻿decltype 'void
+﻿
+-- A void type has no constructors
+decltype 'void
 
+-- A unit type has one constructor
 decltype 'unit
 unit : 'unit
 
+-- A bool type has two constructors
 decltype 'bool
-true : 'bool
+true : 'bool 
 false : 'bool
 
+-- and returns true if both arguments are true
 and : 'bool -> 'bool -> 'bool
->	and true true = true
->	and _ _ = false
+> and true true = true
+> and _ _ = false
+
+-- or returns true if either argument is true
+or : 'bool -> 'bool -> 'bool
+> or false false = false
+> or _ _ = true
+
+-- not inverts the boolean argument
+not : 'bool -> 'bool
+> not true = false
+> not false = true
+
+-- xor can be seen as (A * !B) + (!A * B)
+xor : 'bool -> 'bool -> 'bool
+> xor A B = or (and A (not B)) (and (not A) B)
+
+-- xor can also be seen as false if the arguments are the same
+'xor : 'bool -> 'bool -> 'bool
+> 'xor true true = false
+> 'xor false false = false
+> 'xor _ _ = true
+
+-- main has to be here for the app to work
+main: 'any -> 'unit
+> main X = xor X (not X)

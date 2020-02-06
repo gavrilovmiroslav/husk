@@ -27,7 +27,7 @@ namespace husk
 			var whatever = new Rule("Whatever", '_')[OnWhatever];
 			var identifier = new Rule("Identifier", Ops.Sequence(Optional('\''), Letter, 
 								ZeroOrMore(LetterOrDigit | '-' | '_')))[OnIdentifier];
-			var typeTerm = new Rule("Type Term");   // 
+			var typeTerm = new Rule("Type Term");
 			var typeFactor = new Rule("Type Factor");
 			var typeExpression = new Rule("Type Expression");
 			var typeGroup = new Rule("Type Group");
@@ -57,41 +57,41 @@ namespace husk
 			var expression = new Rule("Expression");
 			var group = new Rule("Group");
 			var composition = Sequence(__, typeFactor)[OnComposition];
-			group.Parser = Sequence('(', typeExpression, ')');
+
+			group.Parser = Sequence('(', expression, ')')[OnComposition];
 			factor.Parser = group | identifier;
 			expression.Parser = Sequence(factor, ZeroOrMore(composition));
+			statement.Parser = expression;
+			var emptyLine = Sequence(_, ';');
+			var comment = new Rule("Comment", Sequence(str("--"), ZeroOrMore(Prims.LetterOrDigit | Prims.WhiteSpace | Prims.Symbol 
+				| ',' | '.' | ':' | '?' | '!' | '(' | ')' | '{' | '}' | '[' | ']' | '*' 
+				| '+' | '-' | '/' | '@' | '#' | '$' | '%' | '^' | '&' | '_' | '='), ';'));
 
-			language = ZeroOrMore(Sequence(typeAssertion | funcDeclaration | typeDeclaration, Optional(OneOrMore(Sequence(_, ';', _)))));
-			//language = typeExpression;
+			language = ZeroOrMore(Sequence(emptyLine | comment | typeAssertion | funcDeclaration | typeDeclaration, Optional(OneOrMore(Sequence(_, ';', _)))));			
 		}
 
 		private void OnBlock(object sender, ActionEventArgs args)
 		{
-			Console.WriteLine("Hole: " + args.Value);
 			stack.Push(new Id("?"));
 		}
 
 		private void OnWhatever(object sender, ActionEventArgs args)
 		{
-			Console.WriteLine("Whatever: " + args.Value);
 			stack.Push(new Id("_"));
 		}
 
 		private void OnIdentifier(object sender, ActionEventArgs args)
 		{
-			Console.WriteLine("Id: " + args.Value);
 			stack.Push(new Id(args.Value));
 		}
 
 		private void OnBuiltin(object sender, ActionEventArgs args)
 		{
-			Console.WriteLine("Builtin: " + args.Value);
 			stack.Push(new BuiltinMarker());
 		}
 
 		private void OnDeclType(object sender, ActionEventArgs args)
 		{
-			Console.WriteLine("Decltype: " + args.Value);
 			stack.Push(new Marker());
 		}
 
@@ -138,13 +138,11 @@ namespace husk
 
 		private void OnParens(object sender, ActionEventArgs args)
 		{
-			Console.WriteLine("OnParens: " + args.Value);
 			stack.Push(new Comp(stack.Pop()));
 		}
 
 		private void OnComposition(object sender, ActionEventArgs args)
 		{
-			Console.WriteLine("App: " + args.Value);
 			var rhs = stack.Pop();
 			var lhs = stack.Pop();
 
@@ -160,7 +158,6 @@ namespace husk
 
 		private void OnIsA(object sender, ActionEventArgs args)
 		{
-			Console.WriteLine("Is a: " + args.Value);
 			var rhs = stack.Pop();
 			var lhs = stack.Pop();
 
@@ -177,17 +174,32 @@ namespace husk
 
 		private void OnArrow(object sender, ActionEventArgs args)
 		{
-			Console.WriteLine("Arrow: " + args.Value);
 			var rhs = stack.Pop();
 			var lhs = stack.Pop();
 
-			stack.Push(new Arrow(null, lhs, rhs));
+			if(lhs is Arrow arr)
+			{
+				stack.Push(new Arrow(arr.Seq, rhs));
+			}
+			else
+			{
+				stack.Push(new Arrow(null, lhs, rhs));
+			}
 		}
 
-		public List<INode> Parse(String s)
+		public List<INode> Parse(String input)
 		{
+			Console.WriteLine("\n\n==============================");
+			Console.WriteLine("  HUSK Parser running...");
+			Console.WriteLine("==============================\n\n");
+
+			Console.WriteLine("Parsing...");
+			Console.WriteLine(input);
+
+			var code = input.Replace(System.Environment.NewLine, ";");
+
 			stack = new Stack<INode>();
-			StringScanner sc = new StringScanner(s);
+			StringScanner sc = new StringScanner(code);
 			this.language.Parse(sc);
 			
 			if (!sc.AtEnd)
@@ -196,9 +208,6 @@ namespace husk
 			var list = new List<INode>(stack);
 			list.Reverse();
 
-			Console.WriteLine("-------------------");
-			foreach (var t in list) Console.WriteLine(t);
-			Console.WriteLine("-------------------");
 			return list;
 		}
 	}
