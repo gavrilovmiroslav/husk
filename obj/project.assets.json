@@ -34,23 +34,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Miroslav\\.nuget\\packages\\": {},
+    "C:\\Users\\Mika\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Miroslav\\source\\repos\\husk\\husk.csproj",
+      "projectUniqueName": "C:\\Users\\Mika\\source\\repos\\husk\\husk.csproj",
       "projectName": "husk",
-      "projectPath": "C:\\Users\\Miroslav\\source\\repos\\husk\\husk.csproj",
-      "packagesPath": "C:\\Users\\Miroslav\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Miroslav\\source\\repos\\husk\\obj\\",
+      "projectPath": "C:\\Users\\Mika\\source\\repos\\husk\\husk.csproj",
+      "packagesPath": "C:\\Users\\Mika\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mika\\source\\repos\\husk\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Miroslav\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Mika\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

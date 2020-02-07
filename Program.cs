@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace husk
@@ -7,11 +8,12 @@ namespace husk
     {
         static void Main(string[] args)
         {
-            var parser = new HuskParser();
-            var interpreter = new HuskEvaluator();            
-            var tokens = parser.Parse(File.ReadAllText("prelude.hsk"));
-            if (interpreter.Evaluate(tokens))
-                Console.WriteLine(interpreter.Interpret());
+            var text = File.ReadAllText("prelude.hsk");
+            var tokenizer = new Tokenizer();
+
+            if(tokenizer.Apply(text, out List<Token> result))
+                foreach(var i in result)
+                    Console.WriteLine(i);
         }
     }
 }

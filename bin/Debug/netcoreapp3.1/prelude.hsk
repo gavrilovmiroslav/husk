@@ -1,41 +1,20 @@
 ﻿
--- A void type has no constructors
-decltype 'void
+{{ A void type has no constructors }}
+-- This is a comment line
 
--- A unit type has one constructor
-decltype 'unit
-unit : 'unit
+decltype 'void 
 
--- A bool type has two constructors
-decltype 'bool
-true : 'bool 
-false : 'bool
+decltype 'unit = unit
 
--- and returns true if both arguments are true
-and : 'bool -> 'bool -> 'bool
-> and true true = true
-> and _ _ = false
+decltype 'bool 
+	= true {{ this is true }}
+	| false {{ this is false }}
 
--- or returns true if either argument is true
-or : 'bool -> 'bool -> 'bool
-> or false false = false
-> or _ _ = true
+decltype 'either a b 
+	= left a {{ it's either the left-hand side }}
+	| right b {{ or the right-hand side }}
 
--- not inverts the boolean argument
-not : 'bool -> 'bool
-> not true = false
-> not false = true
+decltype 'prod a b
+	= a * b
 
--- xor can be seen as (A * !B) + (!A * B)
-xor : 'bool -> 'bool -> 'bool
-> xor A B = or (and A (not B)) (and (not A) B)
-
--- xor can also be seen as false if the arguments are the same
-'xor : 'bool -> 'bool -> 'bool
-> 'xor true true = false
-> 'xor false false = false
-> 'xor _ _ = true
-
--- main has to be here for the app to work
-main: 'any -> 'unit
-> main X = xor X (not X)
+decltype 'n = zero | succ 'n
