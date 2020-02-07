@@ -27,7 +27,8 @@ namespace husk
         CommentLine,
         Or,
         Terminator,
-        Invalid
+        Invalid,
+        Semicolon
     }
 
     public class TokenMatch
@@ -121,7 +122,8 @@ namespace husk
             definitions.Add(new TokenDefinition(TokenType.ClosedParenthesis, "^\\)"));
             definitions.Add(new TokenDefinition(TokenType.OpenParenthesis, "^\\("));
             definitions.Add(new TokenDefinition(TokenType.Equals, "^="));
-            definitions.Add(new TokenDefinition(TokenType.Comma, "^;"));
+            definitions.Add(new TokenDefinition(TokenType.Comma, "^,"));
+            definitions.Add(new TokenDefinition(TokenType.Semicolon, "^;"));
             definitions.Add(new TokenDefinition(TokenType.Identifier, "^['a-z]{1}[a-zA-Z0-9_\\-]*"));
             definitions.Add(new TokenDefinition(TokenType.StringLiteral, @"^""[^""]*"""));
             definitions.Add(new TokenDefinition(TokenType.Operator, "^[+\\-*/~$\\.\\^&><]{1}"));

@@ -11,9 +11,15 @@ namespace husk
             var text = File.ReadAllText("prelude.hsk");
             var tokenizer = new Tokenizer();
 
-            if(tokenizer.Apply(text, out List<Token> result))
-                foreach(var i in result)
+            Console.WriteLine("\n=========   LEXING  =========\n");
+            if(tokenizer.Apply(text, out List<Token> tokens))
+                foreach(var i in tokens)
                     Console.WriteLine(i);
+
+            Console.WriteLine("\n=========  PARSING  =========\n");
+            var parser = new Parser();
+            if (parser.Apply(tokens, out Environment env))
+                Console.WriteLine(env);
         }
     }
 }

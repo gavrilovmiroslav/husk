@@ -1,20 +1,10 @@
 ﻿
-{{ A void type has no constructors }}
--- This is a comment line
+decltype 'void = ;
 
-decltype 'void 
+decltype 'unit = unit;
 
-decltype 'unit = unit
+decltype 'bool = true | false;
 
-decltype 'bool 
-	= true {{ this is true }}
-	| false {{ this is false }}
+decltype 'either a b = left a | right b;
 
-decltype 'either a b 
-	= left a {{ it's either the left-hand side }}
-	| right b {{ or the right-hand side }}
-
-decltype 'prod a b
-	= a * b
-
-decltype 'n = zero | succ 'n
+decltype 'product a b = prod a b;
