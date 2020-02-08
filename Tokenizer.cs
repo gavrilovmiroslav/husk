@@ -28,7 +28,8 @@ namespace husk
         Or,
         Terminator,
         Invalid,
-        Semicolon
+        Semicolon,
+        WhereKeyword
     }
 
     public class TokenMatch
@@ -111,7 +112,8 @@ namespace husk
         {
             definitions.Add(new TokenDefinition(TokenType.CommentLine, "^--[^\n]*\n"));
             definitions.Add(new TokenDefinition(TokenType.Empty, "^\\s*\n"));
-            definitions.Add(new TokenDefinition(TokenType.DeclTypeKeyword, "^decltype"));
+            definitions.Add(new TokenDefinition(TokenType.WhereKeyword, "^where"));
+            definitions.Add(new TokenDefinition(TokenType.DeclTypeKeyword, "^type"));
             definitions.Add(new TokenDefinition(TokenType.AliasKeyword, "^alias"));
             definitions.Add(new TokenDefinition(TokenType.MatchKeyword, "^match"));
             definitions.Add(new TokenDefinition(TokenType.CaseKeyword, "^case"));

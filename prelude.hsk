@@ -1,10 +1,9 @@
 ﻿
-decltype 'void = ;
+type 'void = ;
+type 'unit = unit;
+type 'bool = true | false;
 
-decltype 'unit = unit;
+not : 'bool -> 'bool where
+	not true = false,
+	not false = true;
 
-decltype 'bool = true | false;
-
-decltype 'either a b = left a | right b;
-
-decltype 'product a b = prod a b;

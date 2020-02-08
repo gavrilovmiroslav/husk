@@ -25,9 +25,18 @@ namespace husk
 
     public class FunctionType : TypeDef
     {
+        public string name;
         public TypeDef[] types;
+        public FunctionPattern[] patterns;
 
         public FunctionType() { }
+    }
+
+    public class FunctionPattern : TypeDef
+    {
+        public FunctionType func;
+        public Morphism parameters;
+        public AST body;
     }
 
     public class DataDef
@@ -43,5 +52,13 @@ namespace husk
         public List<DataDef> constructors;
 
         public DeclType() { }
+    }
+
+    public class Morphism : AST
+    {
+        public string name;
+        public Morphism[] ids;
+
+        public Morphism() { }
     }
 }

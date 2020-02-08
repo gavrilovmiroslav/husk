@@ -6,12 +6,16 @@ namespace husk
 {
     public class Parser
     {
+        private Environment env;
+        private int depth;
+
         public Parser() { }
 
         public bool Apply(List<Token> code, out Environment env)
         {
             LoadSequenceStack(DiscardComments(code));
-            env = new Environment();
+            this.env = new Environment();
+            this.depth = 0;
 
             try
             {
@@ -21,16 +25,18 @@ namespace husk
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
+                env = this.env;
                 return false;
             }
 
+            env = this.env;
             return true;
         }
 
         private Stack<Token> stack;
         private Token lookaheadFirst;
         private Token lookaheadSecond;
-
+ 
         private void LoadSequenceStack(List<Token> tokens)
         {
             stack = new Stack<Token>();
@@ -88,20 +94,63 @@ namespace husk
             return output;
         }
 
+        private List<Token> StreamIdentifiers()
+        {
+            var typename = Expect(TokenType.Identifier);
+            var arglist = new List<Token>();
+            Next();
+
+            while (lookaheadFirst.TokenType == TokenType.Identifier)
+            {
+                arglist.Add(Expect(TokenType.Identifier));
+                Next();
+            }
+
+            return arglist.Prepend(typename).ToList<Token>();
+        }
+
+        private Morphism StreamMorphisms()
+        {
+            var name = Expect(TokenType.Identifier);
+            var arglist = new List<Morphism>();
+            Next();
+
+            while (lookaheadFirst.TokenType == TokenType.Identifier 
+                || lookaheadFirst.TokenType == TokenType.OpenParenthesis)
+            {
+                if(lookaheadFirst.TokenType == TokenType.OpenParenthesis)
+                {
+                    arglist.Add(TryQuote(StreamMorphisms));
+                }
+                else
+                {
+                    arglist.Add(new Morphism() { name = Expect(TokenType.Identifier).Value });
+                    Next();
+                }
+            }
+
+            return new Morphism() { name = name.Value, ids = arglist.ToArray() };
+        }
+
         private void Statement()
         {
             switch(lookaheadFirst.TokenType)
             {
-                case TokenType.DeclTypeKeyword: DeclType(); break;
-                default: break;
+                case TokenType.DeclTypeKeyword: DeclareType(); break;
+                case TokenType.Identifier:
+                    if (lookaheadSecond.TokenType == TokenType.Belongs)
+                        DeclareFunction();
+                    
+                    break;
+                default: throw new Exception($"Statement expected, found: {lookaheadFirst}");
             }
         }
 
-        private void DeclType()
+        private void DeclareType()
         {
             Discard(TokenType.DeclTypeKeyword);
 
-            var newtype = GetTypeDef();
+            var newtype = GetSimpleTypeSignature();
             Discard(TokenType.Equals);
 
             var constructors = new List<DataDef>();
@@ -116,62 +165,147 @@ namespace husk
             Discard();
 
             Console.WriteLine($"Declaring type {newtype}");
-            new DeclType() { declaredType = newtype, constructors = constructors };
+            env.typeDeclarations.Add(newtype.ToString(), new DeclType() { declaredType = newtype, constructors = constructors });
         }
 
-        private TypeDef GetTypeDef()
+        private void DeclareFunction()
         {
-            var list = IdentStream();
+            var funcName = Expect(TokenType.Identifier);
+            Next();
 
-            SimpleType t = new SimpleType();
-            if (list.Count > 1)
+            Discard(TokenType.Belongs);
+
+            var funcType = GetFunctionTypeSignature();
+            funcType.name = funcName.Value;
+
+            Discard(TokenType.WhereKeyword);
+
+            GetFunctionPatterns(ref funcType);
+            Console.WriteLine($"Declaring function {funcType}");
+            env.funcDeclarations.Add(funcName.Value, funcType);
+        }
+
+        private T TryQuote<T>(Func<T> unquote)
+            where T : class
+        {
+            if (lookaheadFirst.TokenType == TokenType.OpenParenthesis)
             {
-                t.name = list[0];
-                t.args = list.GetRange(1, list.Count - 1).ToArray();
+                depth++;
+                Discard(TokenType.OpenParenthesis);
+                var result = unquote();
+
+                Discard(TokenType.ClosedParenthesis);
+                depth--;
+
+                return result;
             }
             else
-            {
-                t.name = list[0];
-                t.args = null;
-            };
+                return null;
+        }
 
-            return t;
+        private TypeDef GetSimpleTypeSignature()
+        {
+            var list = new List<TypeDef>();
+            GetSimpleTypeSignature(ref list);
+            return list[0];
+        }
+
+        private void GetSimpleTypeSignature(ref List<TypeDef> list)
+        {
+            if (lookaheadFirst.TokenType == TokenType.OpenParenthesis)
+            {
+                var unquoted = TryQuote(GetFunctionTypeSignature);
+                if (unquoted != null)
+                {
+                    list.Add(unquoted);
+                }
+            }
+            else if (lookaheadFirst.TokenType == TokenType.Identifier)
+            {
+                var ids = StreamIdentifiers();
+
+                SimpleType t = new SimpleType();
+                if (list.Count > 1)
+                {
+                    t.name = ids[0].Value;
+                    t.args = ids.GetRange(1, ids.Count - 1).Select(x => x.Value).ToArray();
+                }
+                else
+                {
+                    t.name = ids[0].Value;
+                    t.args = null;
+                };
+
+                list.Add(t);
+            }
+            else
+                throw new Exception($"Expected parens or identifier, found: {lookaheadFirst}");
+        }
+
+        private FunctionType GetFunctionTypeSignature()
+        {
+            var list = new List<TypeDef>();
+
+            GetSimpleTypeSignature(ref list);
+            while (lookaheadFirst.TokenType == TokenType.Follows)
+            {
+                Next();
+                GetSimpleTypeSignature(ref list);
+            }
+
+            return new FunctionType() { types = list.ToArray() };
         }
 
         private DataDef GetDataDef(TypeDef t)
         {
-            var list = IdentStream();
+            var list = StreamIdentifiers();
 
             DataDef d = new DataDef();
             d.type = t;
 
             if (list.Count > 1)
             {
-                d.name = list[0];
-                d.args = list.GetRange(1, list.Count - 1).ToArray();
+                d.name = list[0].Value;
+                d.args = list.GetRange(1, list.Count - 1).Select(x => x.Value).ToArray();
             }
             else
             {
-                d.name = list[0];
+                d.name = list[0].Value;
                 d.args = null;
             };
 
             return d;
         }
 
-        private List<string> IdentStream()
+        private void GetFunctionPatterns(ref FunctionType func)
         {
-            var typename = Expect(TokenType.Identifier);
-            var arglist = new List<string>();
-            Next();
-
-            while(lookaheadFirst.TokenType == TokenType.Identifier)
+            var list = new List<FunctionPattern>();
+            do
             {
-                arglist.Add(Expect(TokenType.Identifier).Value);
-                Next();
-            }
+                var funcName = Expect(TokenType.Identifier);
+                if (func.name != funcName.Value)
+                    throw new Exception($"Expected a pattern for function {func.name}, found: {funcName}");
 
-            return arglist.Prepend(typename.Value).ToList<string>();
+                int parameterCount = func.types.Length;
+
+                var parameters = StreamMorphisms();
+
+                Discard(TokenType.Equals);
+
+                var body = StreamMorphisms();
+                list.Add(new FunctionPattern()
+                {
+                    func = func,
+                    parameters = parameters,
+                    body = body
+                });
+
+                if (lookaheadFirst.TokenType == TokenType.Comma) Next();
+                else if (lookaheadFirst.TokenType == TokenType.Semicolon) break;
+            } while (true);
+
+            func.patterns = list.ToArray();
+            Discard(TokenType.Semicolon);
         }
 
         #endregion
